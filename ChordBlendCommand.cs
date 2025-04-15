@@ -1,12 +1,12 @@
 ﻿// ChordBlendCommand.cs
 using System;
+using System.Collections.Generic;
 using Rhino;
 using Rhino.Commands;
 using Rhino.Input;
 using Rhino.Input.Custom;
 using Rhino.Geometry;
 using ChordBlend.UI;
-using ChordBlend.Geometry;
 
 namespace ChordBlend.Commands
 {
@@ -40,7 +40,17 @@ namespace ChordBlend.Commands
             RhinoApp.WriteLine("Computed chord length: {0:0.###}", chordLength);
 
             var dialog = new ChordBlendDialog();
+            dialog.SetPreviewData(inputCurve, chordLength, doc);
             dialog.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow);
+
+            // Delete preview curve if it exists to avoid duplicate
+            var previewIdField = typeof(ChordBlendDialog).GetField("_previewId", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (previewIdField != null)
+            {
+                var previewId = (Guid)previewIdField.GetValue(dialog);
+                if (previewId != Guid.Empty)
+                    doc.Objects.Delete(previewId, false);
+            }
             if (!dialog.Result)
             {
                 RhinoApp.WriteLine("Cancelled.");
@@ -50,7 +60,7 @@ namespace ChordBlend.Commands
             double strength = dialog.SelectedStrength;
             int modeSelection = dialog.SelectedMode;
 
-            Curve output = BlendGenerator.Generate(inputCurve, chordLength, strength, modeSelection);
+            Curve output = ChordBlend.Geometry.BlendGenerator.Generate(inputCurve, chordLength, strength, modeSelection);
             if (output == null || !output.IsValid)
             {
                 RhinoApp.WriteLine("Failed to generate chord blend.");
@@ -58,6 +68,7 @@ namespace ChordBlend.Commands
             }
 
             doc.Objects.AddCurve(output);
+            doc.Objects.Delete(go.Object(0).ObjectId, false);
             doc.Views.Redraw();
             RhinoApp.WriteLine("Chord blend created.");
 

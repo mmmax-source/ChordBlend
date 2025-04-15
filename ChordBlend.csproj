@@ -17,8 +17,8 @@
     <!-- Specifies information for Assembly and Yak -->
     <Version>1.0</Version>
     <Title>ChordBlend</Title>
-    <Company>ChordBlend Authors</Company>
-    <Description>Description of ChordBlend</Description>
+    <Company>Max Hausmann</Company>
+    <Description>Blends polylines based on calculated chord lengths</Description>
   </PropertyGroup>
   
   <ItemGroup>

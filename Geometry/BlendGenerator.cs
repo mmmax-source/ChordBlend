@@ -17,10 +17,10 @@ namespace ChordBlend.Geometry
                 return null;
 
             bool isClosed = input.IsClosed;
-            
             if (isClosed && pts[0].DistanceTo(pts[pts.Count - 1]) < 1e-9)
                 pts.RemoveAt(pts.Count - 1);
 
+            // ✅ Updated count after potential removal
             int count = pts.Count;
 
             var trimPts = new List<Point3d[]>();
@@ -113,14 +113,12 @@ namespace ChordBlend.Geometry
 
             Point3d c0 = pt1;
             Point3d c5 = pt2;
-            Point3d c1 = c0 + vin * (a / 5.0);
+            Point3d c1 = new Point3d(c0.X + vin.X * (a / 5.0), c0.Y + vin.Y * (a / 5.0), c0.Z + vin.Z * (a / 5.0));
             Vector3d v_c1c0 = c1 - c0;
             Point3d c2 = c1 + v_c1c0;
-
-            Point3d c4 = c5 + (-vout) * (a / 5.0);
+            Point3d c4 = new Point3d(c5.X - vout.X * (a / 5.0), c5.Y - vout.Y * (a / 5.0), c5.Z - vout.Z * (a / 5.0));
             Vector3d v_c5c4 = c4 - c5;
             Point3d c3 = c4 + v_c5c4;
-
 
             return NurbsCurve.Create(false, 5, new[] { c0, c1, c2, c3, c4, c5 });
         }
