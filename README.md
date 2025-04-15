@@ -4,7 +4,7 @@
 
 ## Installation via Rhino Package Manager
 rhino8://package/search?name=ChordBlend
-or search for ChordBlend
+or search for "ChordBlend"
 
 ## Features
 - Two blend modes: Arc (G1) and Blend (G2)
