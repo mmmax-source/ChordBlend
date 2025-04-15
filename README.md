@@ -3,7 +3,7 @@
 **ChordBlend** is a Rhino plugin that replaces sharp corners in polylines with smooth transitions using either arc fillets (G1) or curvature-continuous blends (G2). The user defines a "90° equivalent radius", and the plugin automatically computes the corresponding chord length for consistent corner smoothing.
 
 ## Installation via Rhino Package Manager
-- open rhino8://package/search?name=ChordBlend
+- open in browser rhino8://package/search?name=ChordBlend
 - or search for "ChordBlend"
 
 ## Features
